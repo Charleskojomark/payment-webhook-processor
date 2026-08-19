@@ -11,7 +11,7 @@ This module initializes the FastAPI application with:
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers import stripe_webhooks
+from app.routers import paypal_webhooks, stripe_webhooks
 
 # ─── Application Factory ──────────────────────────────────────────────────────
 
@@ -40,6 +40,7 @@ app.add_middleware(
 # ─── Routers ──────────────────────────────────────────────────────────────────
 
 app.include_router(stripe_webhooks.router)
+app.include_router(paypal_webhooks.router)
 
 
 # ─── Lifecycle Events ─────────────────────────────────────────────────────────
