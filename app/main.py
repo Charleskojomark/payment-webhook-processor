@@ -1,0 +1,68 @@
+"""
+Payment Webhook Processor - FastAPI Application Entry Point
+
+This module initializes the FastAPI application with:
+- CORS middleware for cross-origin requests
+- Health check endpoint
+- Versioned API routers (added incrementally per day)
+- Startup/shutdown lifecycle events
+"""
+
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+# ─── Application Factory ──────────────────────────────────────────────────────
+
+app = FastAPI(
+    title="Payment Webhook Processor",
+    description=(
+        "Production-grade webhook processing for Stripe and PayPal. "
+        "Features idempotency, audit logging, dead-letter queuing, and "
+        "an admin dashboard."
+    ),
+    version="1.0.0",
+    docs_url="/docs",
+    redoc_url="/redoc",
+)
+
+# ─── Middleware ───────────────────────────────────────────────────────────────
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Restrict in production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+# ─── Lifecycle Events ─────────────────────────────────────────────────────────
+
+@app.on_event("startup")
+async def on_startup() -> None:
+    """Run on application startup."""
+    # Database and Redis connections will be initialised here (added Day 4)
+    pass
+
+
+@app.on_event("shutdown")
+async def on_shutdown() -> None:
+    """Run on application shutdown."""
+    pass
+
+
+# ─── Core Endpoints ───────────────────────────────────────────────────────────
+
+@app.get("/health", tags=["System"])
+async def health_check() -> dict:
+    """
+    Health check endpoint.
+
+    Returns the current health status of the service.
+    Used by load balancers and monitoring systems.
+    """
+    return {
+        "status": "healthy",
+        "service": "payment-webhook-processor",
+        "version": "1.0.0",
+    }
