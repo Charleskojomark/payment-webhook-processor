@@ -11,6 +11,8 @@ This module initializes the FastAPI application with:
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.routers import stripe_webhooks
+
 # ─── Application Factory ──────────────────────────────────────────────────────
 
 app = FastAPI(
@@ -34,6 +36,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# ─── Routers ──────────────────────────────────────────────────────────────────
+
+app.include_router(stripe_webhooks.router)
 
 
 # ─── Lifecycle Events ─────────────────────────────────────────────────────────
