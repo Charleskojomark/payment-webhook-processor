@@ -48,7 +48,10 @@ app.include_router(paypal_webhooks.router)
 @app.on_event("startup")
 async def on_startup() -> None:
     """Run on application startup."""
-    # Database and Redis connections will be initialised here (added Day 4)
+    # Initialize DB (if using create_all instead of alembic for dev)
+    # from app.db.database import engine, Base
+    # async with engine.begin() as conn:
+    #     await conn.run_sync(Base.metadata.create_all)
     pass
 
 
